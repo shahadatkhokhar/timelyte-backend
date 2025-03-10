@@ -27,7 +27,7 @@ const sequelize = new Sequelize(dbName, username, password, {
 });
 
 const syncDbAndAuthenticate = async () => {
-  await sequelize.sync({ force: false, alter: { drop: false } });
+  await sequelize.sync({ force: true, alter: { drop: false } });
   logger.info('Database Synced');
 };
 

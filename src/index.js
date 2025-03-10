@@ -1,6 +1,6 @@
 const logger = require('./config/logger');
 const db = require('./config/db');
-
+require('./app');
 const exitHandler = () => {
   if (db) {
     db.close(() => {

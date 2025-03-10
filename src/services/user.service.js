@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const bcrypt = require('bcryptjs');
-const { User } = require('../models');
+const User = require('../models/user');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -9,7 +9,8 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
-  if (await User.isEmailTaken(userBody.email)) {
+  const user = await getUserByEmail(userBody.email);
+  if (user) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
   return User.create(userBody);
@@ -38,8 +39,7 @@ const getUserById = async (id) => {
   return User.findOne({ where: { id } });
 };
 
-const isPasswordMatch = async function (password) {
-  const user = this;
+const isPasswordMatch = async function (password, user) {
   return bcrypt.compare(password, user.password);
 };
 
@@ -49,7 +49,8 @@ const isPasswordMatch = async function (password) {
  * @returns {Promise<User>}
  */
 const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+  console.log(email);
+  return User.findOne({ where: { email } });
 };
 
 /**

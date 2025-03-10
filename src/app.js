@@ -10,8 +10,10 @@ const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
 const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
+require('./config/db');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
+const logger = require('./config/logger');
 
 const app = express();
 
@@ -61,5 +63,7 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
-
+app.listen(config.port || 3000, () => {
+  logger.info(`Server running in on PORT ${config.port || 3000}`);
+});
 module.exports = app;
